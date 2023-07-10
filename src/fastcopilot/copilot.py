@@ -44,6 +44,9 @@ class Copilot:
         self._func_mapping = {}  # type: dict[str, FuncSpec]
 
     def register_functions(self, *specs: FuncSpec):
+        """
+        Add functions for OpenAI function_call.
+        """
         if not self._functions:
             self._functions = []
         for spec in specs:
@@ -69,6 +72,9 @@ class Copilot:
         return p
 
     def run(self, ipt: str) -> tuple[str, dict]:
+        """
+        Get reply from copilot.
+        """
         if not self.messages:
             self.messages = []
 
@@ -110,6 +116,9 @@ class Copilot:
         return response["choices"][0]["message"]["content"], usage
 
     async def arun(self, ipt: str) -> tuple[str, dict]:
+        """
+        Get reply asynchronously from copilot.
+        """
         if not self.messages:
             self.messages = []
 

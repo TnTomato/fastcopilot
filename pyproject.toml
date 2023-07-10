@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "fastcopilot"
-version = "0.5.0"
+version = "0.5.1"
 description = "Fast Copilot framework, easy to learn, fast to code, fast to build a copilot for your applications."
-authors = ["Jackson <jackson.zhang@mrs.ai>"]
+authors = ["Jackson <jackson.zhang0429@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
