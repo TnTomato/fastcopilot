@@ -86,7 +86,7 @@ class Copilot:
         )
         response = openai.ChatCompletion.create(**self.params)
         resp_msg = response["choices"][0]["message"]
-        if function_call := resp_msg.get("function_call"):
+        while function_call := resp_msg.get("function_call"):
             func_name = function_call["name"]
             arguments = json.loads(function_call["arguments"])
             logger.debug(f"<FunctionCall>name: {func_name}, arguments: {arguments}")
@@ -104,6 +104,8 @@ class Copilot:
                 }
             )
             response = openai.ChatCompletion.create(**self.params)
+            resp_msg = response["choices"][0]["message"]
+
         self.messages.append(
             {
                 "role": "assistant",
