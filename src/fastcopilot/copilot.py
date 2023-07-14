@@ -86,7 +86,10 @@ class Copilot:
         )
         response = openai.ChatCompletion.create(**self.params)
         resp_msg = response["choices"][0]["message"]
+
         while function_call := resp_msg.get("function_call"):
+            self.messages.append(resp_msg.to_dict_recursive())
+
             func_name = function_call["name"]
             arguments = json.loads(function_call["arguments"])
             logger.debug(f"<FunctionCall>name: {func_name}, arguments: {arguments}")
@@ -106,16 +109,11 @@ class Copilot:
             response = openai.ChatCompletion.create(**self.params)
             resp_msg = response["choices"][0]["message"]
 
-        self.messages.append(
-            {
-                "role": "assistant",
-                "content": response["choices"][0]["message"]["content"]
-            }
-        )
+        self.messages.append(resp_msg.to_dict_recursive())
 
         usage = response["usage"]
 
-        return response["choices"][0]["message"]["content"], usage
+        return resp_msg["content"], usage
 
     async def arun(self, ipt: str) -> tuple[str, dict]:
         """
@@ -136,6 +134,8 @@ class Copilot:
         )
         resp_msg = response["choices"][0]["message"]
         while function_call := resp_msg.get("function_call"):
+            self.messages.append(resp_msg.to_dict_recursive())
+
             func_name = function_call["name"]
             arguments = json.loads(function_call["arguments"])
             logger.debug(f"<FunctionCall>name: {func_name}, arguments: {arguments}")
@@ -163,13 +163,8 @@ class Copilot:
             )
             resp_msg = response["choices"][0]["message"]
 
-        self.messages.append(
-            {
-                "role": "assistant",
-                "content": response["choices"][0]["message"]["content"]
-            }
-        )
+        self.messages.append(resp_msg.to_dict_recursive())
 
         usage = response["usage"]
 
-        return response["choices"][0]["message"]["content"], usage
+        return resp_msg["content"], usage
